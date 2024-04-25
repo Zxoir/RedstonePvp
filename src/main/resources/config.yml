@@ -1,0 +1,8 @@
+# Choose how you want the plugin to save its data. (sqlite, mysql, flatfile)
+Database Username: root
+Database Name: database
+Database Password: password
+Database IP: localhost
+Database Port: 3306
+
+cookie-cooldown: 5000

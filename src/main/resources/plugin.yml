@@ -1,0 +1,15 @@
+name: RedstonePvp
+version: '${project.version}'
+main: me.zxoir.redstonepvp.RedstonePvp
+api-version: '1.20'
+commands:
+  itemframeclicker:
+    description: ItemFrameClicker command
+    aliases: [ifc]
+    permission: redstonepvp.itemframeclicker.command
+  trash:
+    description: Trash Command
+permissions:
+  "redstonepvp.itemframeclicker.command":
+    description: Permission to use the itemframe clicker command
+    default: op
