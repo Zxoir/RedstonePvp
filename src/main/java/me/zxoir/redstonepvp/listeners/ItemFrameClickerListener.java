@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -28,11 +27,6 @@ import java.util.UUID;
 public class ItemFrameClickerListener implements Listener {
     private static final HashMap<UUID, HashMap<ItemFrame, Long>> playerItemFrameCooldowns = new HashMap<>(); // TODO: Save on disable
 
-    @EventHandler
-    public void test(EntityInteractEvent event) {
-        Bukkit.broadcastMessage("test");
-    }
-
     @EventHandler()
     public void onItemFrameAdd(@NotNull PlayerInteractEntityEvent event) {
         if (!(event.getRightClicked() instanceof ItemFrame))
@@ -41,7 +35,7 @@ public class ItemFrameClickerListener implements Listener {
         ItemFrame itemFrame = (ItemFrame) event.getRightClicked();
         Player player = event.getPlayer();
         ItemStack itemStack = player.getItemInHand();
-        ItemStack itemStackOnFrame = itemFrame.getItem();
+        ItemStack itemStackOnFrame = itemFrame.getItem().clone();
 
         if (itemStack == null || itemStack.getType() == Material.AIR || itemStackOnFrame == null || itemStackOnFrame.getType() != Material.AIR)
             return;
@@ -74,13 +68,15 @@ public class ItemFrameClickerListener implements Listener {
         bukkitTask.cancel();
 
         if (input.equalsIgnoreCase("enable") || input.equalsIgnoreCase("0")) {
-            ItemFrameClickerCommand.getItemFrameCooldowns().remove(itemFrame);
+            setPlayerItemFrameCooldown(itemStack, 0);
+            itemFrame.setItem(itemStack);
             player.sendMessage("That Itemframe has been enabled.");
             return;
         }
 
         if (input.equalsIgnoreCase("disable")) {
-            ItemFrameClickerCommand.getItemFrameCooldowns().put(itemFrame, -1L);
+            setPlayerItemFrameCooldown(itemStack, -1L);
+            itemFrame.setItem(itemStack);
             player.sendMessage("That Itemframe has been disabled.");
             return;
         }
@@ -91,7 +87,8 @@ public class ItemFrameClickerListener implements Listener {
             return;
         }
 
-        ItemFrameClickerCommand.getItemFrameCooldowns().put(itemFrame, cooldown);
+        setPlayerItemFrameCooldown(itemStack, cooldown);
+        itemFrame.setItem(itemStack);
         player.sendMessage("A cooldown has been set for that ItemFrame.");
     }
 
@@ -101,15 +98,15 @@ public class ItemFrameClickerListener implements Listener {
             return;
 
         ItemFrame itemFrame = (ItemFrame) event.getRightClicked();
-        ItemStack itemStack = itemFrame.getItem();
+        ItemStack itemStack = itemFrame.getItem().clone();
 
         if (itemStack == null || itemStack.getType() == Material.AIR)
             return;
 
         Player player = event.getPlayer();
-        boolean isCooldown = ItemFrameClickerCommand.getItemFrameCooldowns().containsKey(itemFrame);
+        long cooldown = getItemStackCooldown(itemStack);
 
-        if (isCooldown && ItemFrameClickerCommand.getItemFrameCooldowns().get(itemFrame) == -1L)
+        if (cooldown == -1L)
             return;
 
         event.setCancelled(true);
@@ -117,10 +114,9 @@ public class ItemFrameClickerListener implements Listener {
         if (isOnCooldown(player, itemFrame))
             return;
 
-        if (isCooldown) {
-            long cooldown = ItemFrameClickerCommand.getItemFrameCooldowns().getOrDefault(itemFrame, 0L);
+        if (cooldown > 0) {
             playerItemFrameCooldowns.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>()).put(itemFrame, System.currentTimeMillis() + cooldown);
-            BukkitTask cooldownRemovalTask = Bukkit.getScheduler().runTaskLater(
+            Bukkit.getScheduler().runTaskLater(
                     RedstonePvp.getPlugin(RedstonePvp.class),
                     () -> {
                         HashMap<ItemFrame, Long> cooldowns = playerItemFrameCooldowns.get(player.getUniqueId());
@@ -160,10 +156,47 @@ public class ItemFrameClickerListener implements Listener {
         itemStack.setItemMeta(itemMeta);
     }
 
-    private boolean containsFrameLore(ItemStack itemStack) {
-        if (itemStack == null || itemStack.getItemMeta() == null || itemStack.getItemMeta().getLore() == null || itemStack.getItemMeta().getLore().isEmpty())
-            return false;
-        return true;
+    private void setPlayerItemFrameCooldown(@NotNull ItemStack itemStack, long cooldown) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        List<String> lore = itemMeta.getLore();
+        String loreToAdd = "Cooldown: " + cooldown;
+        String loreToRemove = "";
+
+        for (String line : lore) {
+            String strippedLine = ChatColor.stripColor(line);
+            if (!strippedLine.startsWith("Cooldown: "))
+                continue;
+
+            loreToRemove = line;
+            break;
+        }
+
+        lore.remove(loreToRemove);
+        lore.add(loreToAdd);
+        itemMeta.setLore(lore);
+        itemStack.setItemMeta(itemMeta);
+    }
+
+    private long getItemStackCooldown(@NotNull ItemStack itemStack) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        List<String> lore = itemMeta.getLore();
+        String loreToRemove = "";
+        long cooldown = 0;
+
+        for (String line : lore) {
+            String strippedLine = ChatColor.stripColor(line);
+            if (!strippedLine.startsWith("Cooldown: "))
+                continue;
+
+            loreToRemove = line;
+            cooldown = Long.parseLong(strippedLine.replace("Cooldown: ", ""));
+            break;
+        }
+
+        lore.remove(loreToRemove);
+        itemMeta.setLore(lore);
+        itemStack.setItemMeta(itemMeta);
+        return cooldown;
     }
 
     private boolean isOnCooldown(@NotNull Player player, ItemFrame itemFrame) {

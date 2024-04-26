@@ -1,7 +1,7 @@
 name: RedstonePvp
 version: '${project.version}'
 main: me.zxoir.redstonepvp.RedstonePvp
-api-version: '1.20'
+description: "RedstonePvp plugin"
 commands:
   itemframeclicker:
     description: ItemFrameClicker command

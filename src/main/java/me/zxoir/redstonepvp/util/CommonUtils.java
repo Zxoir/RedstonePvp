@@ -1,7 +1,14 @@
 package me.zxoir.redstonepvp.util;
 
 import me.zxoir.redstonepvp.RedstonePvp;
+import me.zxoir.redstonepvp.data.PlayerProfile;
+import me.zxoir.redstonepvp.managers.PlayerProfileManager;
+import net.minecraft.server.v1_8_R3.ChatComponentText;
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,6 +46,18 @@ public class CommonUtils {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public static void sendActionText(Player player, String message) {
+        runTaskAsync(() -> {
+            //PlayerProfile user = PlayerProfileManager.getPlayerProfile(player.getUniqueId());
+
+            //user.setActionbar(true);
+            //Bukkit.getScheduler().runTaskLaterAsynchronously(mainInstance, () -> user.setActionbar(false), 60);
+
+            PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(colorize(message)), (byte) 2);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+        });
     }
 
     @NotNull

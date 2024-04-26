@@ -34,8 +34,6 @@ import java.util.UUID;
  */
 public class ItemFrameClickerCommand implements CommandExecutor {
     @Getter
-    private static final HashMap<ItemFrame, Long> itemFrameCooldowns = new HashMap<>();
-    @Getter
     private static final HashMap<UUID, Object[]> pendingItemFrameModification = new HashMap<>();
 
     @Override

@@ -6,8 +6,12 @@ import org.bukkit.Difficulty;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -44,6 +48,30 @@ public class WorldListener implements Listener {
         event.getWorld().setTime(1000);
         event.getWorld().setThundering(false);
         event.getWorld().setThunderDuration(1);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onArrowSelf(@NotNull EntityDamageByEntityEvent event) {
+        if (event.getCause() != EntityDamageEvent.DamageCause.PROJECTILE)
+            return;
+
+        if (event.getDamager().getType() != EntityType.ARROW)
+            return;
+
+        Arrow arrow = (Arrow) event.getDamager();
+        if (!(arrow.getShooter() instanceof Player))
+            return;
+
+        if (!event.getEntityType().equals(EntityType.PLAYER))
+            return;
+
+        Player shooter = (Player) arrow.getShooter();
+        Player damaged = (Player) event.getEntity();
+
+        if (!shooter.equals(damaged))
+            return;
+
+        event.setCancelled(true);
     }
 
     @EventHandler

@@ -29,10 +29,9 @@ public class AFKListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onMove(@NotNull PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        Location from = event.getFrom();
-        Location to = event.getTo();
+        PlayerProfile profile = PlayerProfileManager.getPlayerProfile(player.getUniqueId());
 
-        cancelAfkCheck(player);
+        cancelAfkCheck(player, profile);
         scheduleAfkCheck(player);
     }
 
@@ -40,14 +39,14 @@ public class AFKListener implements Listener {
     public void onQuit(@NotNull PlayerQuitEvent event) {
         Player player = event.getPlayer();
         PlayerProfile profile = PlayerProfileManager.getPlayerProfile(player.getUniqueId());
-        cancelAfkCheck(player);
+        cancelAfkCheck(player, profile);
     }
 
     @EventHandler
     public void onKick(@NotNull PlayerKickEvent event) {
         Player player = event.getPlayer();
         PlayerProfile profile = PlayerProfileManager.getPlayerProfile(player.getUniqueId());
-        cancelAfkCheck(player);
+        cancelAfkCheck(player, profile);
     }
 
     @EventHandler
@@ -58,7 +57,7 @@ public class AFKListener implements Listener {
         if (!profile.isAfk())
             return;
 
-        cancelAfkCheck(player);
+        cancelAfkCheck(player, profile);
         scheduleAfkCheck(player);
     }
 
@@ -70,7 +69,7 @@ public class AFKListener implements Listener {
         if (!profile.isAfk())
             return;
 
-        cancelAfkCheck(player);
+        cancelAfkCheck(player, profile);
         scheduleAfkCheck(player);
     }
 
@@ -82,7 +81,7 @@ public class AFKListener implements Listener {
         if (!profile.isAfk())
             return;
 
-        cancelAfkCheck(player);
+        cancelAfkCheck(player, profile);
         scheduleAfkCheck(player);
     }
 
@@ -114,31 +113,30 @@ public class AFKListener implements Listener {
         long AFK_TIMER = 160;
         afkChecks.put(player.getUniqueId(), false);
         Bukkit.getScheduler().runTaskLater(mainInstance, () -> {
+            PlayerProfile profile = PlayerProfileManager.getPlayerProfile(player.getUniqueId());
 
             if (afkChecks.get(player.getUniqueId())) {
-                cancelAfkCheck(player);
+                cancelAfkCheck(player, profile);
                 afkChecks.remove(player.getUniqueId());
                 scheduleAfkCheck(player);
                 return;
             }
 
             afkChecks.remove(player.getUniqueId());
-            cancelAfkCheck(player);
-            setPlayerAFK(player, true);
+            cancelAfkCheck(player, profile);
+            setPlayerAFK(player, true, profile);
         }, 20L * AFK_TIMER);
     }
 
-    private void cancelAfkCheck(@NotNull Player player) {
+    private void cancelAfkCheck(@NotNull Player player, PlayerProfile profile) {
         if (afkChecks.containsKey(player.getUniqueId()))
             afkChecks.put(player.getUniqueId(), true);
 
-        PlayerProfile profile = PlayerProfileManager.getPlayerProfile(player.getUniqueId());
         if (profile.isAfk())
-            setPlayerAFK(player, false);
+            setPlayerAFK(player, false, profile);
     }
 
-    private void setPlayerAFK(@NotNull Player player, boolean afk) {
-        PlayerProfile profile = PlayerProfileManager.getPlayerProfile(player.getUniqueId());
+    private void setPlayerAFK(@NotNull Player player, boolean afk, PlayerProfile profile) {
         profile.setAfk(afk);
         PlayerAFKEvent afkEvent = new PlayerAFKEvent(player, afk, profile);
         Bukkit.getServer().getPluginManager().callEvent(afkEvent);
