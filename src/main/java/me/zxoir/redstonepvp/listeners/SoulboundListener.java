@@ -30,6 +30,9 @@ public class SoulboundListener implements Listener {
     public void onDeath(@NotNull PlayerDeathEvent event) {
         Player player = event.getEntity();
 
+        if (player.getWorld() != null && player.getWorld().getGameRuleValue("keepInventory").equalsIgnoreCase("true"))
+            return;
+
         event.getDrops().removeIf(itemStack -> {
             if (!SoulboundEnchantment.isSoulbound(itemStack))
                 return false;
@@ -51,6 +54,7 @@ public class SoulboundListener implements Listener {
         Bukkit.getScheduler().runTaskLater(RedstonePvp.getPlugin(RedstonePvp.class), () -> {
             List<ItemStack> items = itemsToReturn.get(player.getUniqueId());
             items.forEach(item -> player.getInventory().addItem(item));
+            itemsToReturn.remove(player.getUniqueId());
             player.updateInventory();
         }, 5);
     }

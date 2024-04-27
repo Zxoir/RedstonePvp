@@ -41,7 +41,7 @@ public class ItemFrameClickerListener implements Listener {
             return;
 
         event.setCancelled(true);
-        itemFrame.setItem(new ItemStackBuilder(itemStack.clone()).withLore("Amount: " + itemStack.getAmount()).build());
+        itemFrame.setItem(new ItemStackBuilder(itemStack.clone()).withLore("Amount: " + itemStack.getAmount()).withLore("Cooldown: 0").build());
         player.sendMessage("Itemframe item set!");
     }
 

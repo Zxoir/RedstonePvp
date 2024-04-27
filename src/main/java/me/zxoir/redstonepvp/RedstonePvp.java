@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.zxoir.redstonepvp.commands.ItemFrameClickerCommand;
 import me.zxoir.redstonepvp.commands.TrashCommand;
 import me.zxoir.redstonepvp.database.RedstoneDatabase;
+import me.zxoir.redstonepvp.enchants.PoisonEnchantment;
 import me.zxoir.redstonepvp.enchants.SoulboundEnchantment;
 import me.zxoir.redstonepvp.listeners.*;
 import me.zxoir.redstonepvp.util.EnchantmentUtil;
@@ -26,6 +27,8 @@ public final class RedstonePvp extends JavaPlugin {
     private long cookieCooldown;
     @Getter
     private static Enchantment soulboundEnchantment;
+    @Getter
+    private static Enchantment poisonEnchantment;
 
     @Override
     public void onEnable() {
@@ -46,7 +49,9 @@ public final class RedstonePvp extends JavaPlugin {
                 ");");
 
         soulboundEnchantment = new SoulboundEnchantment(100);
+        poisonEnchantment = new PoisonEnchantment(100);
         EnchantmentUtil.registerCustomEnchantment(soulboundEnchantment);
+        EnchantmentUtil.registerCustomEnchantment(poisonEnchantment);
 
         registerListeners();
         registerCommand();
@@ -68,6 +73,7 @@ public final class RedstonePvp extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemFrameClickerListener(), this);
         getServer().getPluginManager().registerEvents(new XpOnHitListener(), this);
         getServer().getPluginManager().registerEvents(new SoulboundListener(), this);
+        getServer().getPluginManager().registerEvents(new CombatLogListener(), this);
     }
 
     private void registerCommand() {

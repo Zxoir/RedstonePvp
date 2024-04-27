@@ -1,5 +1,6 @@
 package me.zxoir.redstonepvp.util;
 
+import io.netty.util.internal.ThreadLocalRandom;
 import me.zxoir.redstonepvp.RedstonePvp;
 import me.zxoir.redstonepvp.data.PlayerProfile;
 import me.zxoir.redstonepvp.managers.PlayerProfileManager;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CommonUtils {
     private static final RedstonePvp mainInstance = RedstonePvp.getPlugin(RedstonePvp.class);
+    private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     public static void runTaskSync(Task task) {
         new BukkitRunnable() {
@@ -58,6 +60,18 @@ public class CommonUtils {
             PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(colorize(message)), (byte) 2);
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         });
+    }
+
+    public static boolean rollPercentage(double percentage) {
+        if (percentage < 0.0 || percentage > 100.0) {
+            throw new IllegalArgumentException("Percentage must be between 0.0 and 100.0");
+        }
+
+        // Generate a random number between 0.0 (inclusive) and 100.0 (exclusive)
+        double randomNumber = random.nextDouble(0.0, 100.0);
+
+        // Check if the generated random number is less than the specified percentage
+        return randomNumber < percentage;
     }
 
     @NotNull

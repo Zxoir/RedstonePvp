@@ -11,24 +11,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * MIT License Copyright (c) 2024 Zxoir
- *
- * @author Zxoir
- * @since 4/25/2024
- */
-public class SoulboundEnchantment extends Enchantment {
-    public SoulboundEnchantment(int id) {
+public class PoisonEnchantment extends Enchantment {
+    public PoisonEnchantment(int id) {
         super(id);
     }
 
-    public static void applyDisplayName(@NotNull ItemStack itemStack) {
+    public static void applyDisplayName(@NotNull ItemStack itemStack, int level) {
         ItemMeta itemMeta = itemStack.getItemMeta();
 
         if (itemMeta == null)
             return;
 
-        String name = ChatColor.GOLD + "Soulbound";
+        String name = ChatColor.DARK_PURPLE + "Poison " + (level == 1 ? "I" : "II");
         if (itemMeta.getLore() == null) {
             itemMeta.setLore(Collections.singletonList(name));
         } else {
@@ -40,8 +34,12 @@ public class SoulboundEnchantment extends Enchantment {
         itemStack.setItemMeta(itemMeta);
     }
 
-    public static boolean isSoulbound(ItemStack itemStack) {
-        return itemStack != null && itemStack.containsEnchantment(RedstonePvp.getSoulboundEnchantment());
+    public static double getPoisonChance(int level) {
+        return level == 1 ? 25 : 45;
+    }
+
+    public static boolean isPoison(ItemStack itemStack) {
+        return itemStack != null && itemStack.containsEnchantment(RedstonePvp.getPoisonEnchantment());
     }
 
     @Override
@@ -61,12 +59,12 @@ public class SoulboundEnchantment extends Enchantment {
 
     @Override
     public int getMaxLevel() {
-        return 1;
+        return 2;
     }
 
     @Override
     public String getName() {
-        return ChatColor.GOLD + "Soulbound";
+        return "Poison";
     }
 
     @Override
