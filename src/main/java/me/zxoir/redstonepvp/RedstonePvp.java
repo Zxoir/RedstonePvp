@@ -74,6 +74,10 @@ public final class RedstonePvp extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new XpOnHitListener(), this);
         getServer().getPluginManager().registerEvents(new SoulboundListener(), this);
         getServer().getPluginManager().registerEvents(new CombatLogListener(), this);
+        getServer().getPluginManager().registerEvents(new PoisonListener(), this);
+        getServer().getPluginManager().registerEvents(new CommonItemRemoverListener(), this);
+        getServer().getPluginManager().registerEvents(new EnchantLimiterListener(), this);
+        getServer().getPluginManager().registerEvents(new AbsorptionRemover(), this);
     }
 
     private void registerCommand() {

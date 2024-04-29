@@ -2,25 +2,17 @@ package me.zxoir.redstonepvp.commands;
 
 import lombok.Getter;
 import me.zxoir.redstonepvp.RedstonePvp;
+import me.zxoir.redstonepvp.enchants.PoisonEnchantment;
 import me.zxoir.redstonepvp.enchants.SoulboundEnchantment;
-import me.zxoir.redstonepvp.util.TimeManager;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,6 +27,7 @@ import java.util.UUID;
 public class ItemFrameClickerCommand implements CommandExecutor {
     @Getter
     private static final HashMap<UUID, Object[]> pendingItemFrameModification = new HashMap<>();
+    private static final RedstonePvp mainInstance = RedstonePvp.getPlugin(RedstonePvp.class);
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -65,15 +58,17 @@ public class ItemFrameClickerCommand implements CommandExecutor {
             player.updateInventory();
         }
 
-        if (args[0].equalsIgnoreCase("enchant")) {
+        if (args[0].equalsIgnoreCase("poison")) {
             ItemStack itemInHand = player.getItemInHand();
             itemInHand.addUnsafeEnchantment(RedstonePvp.getSoulboundEnchantment(), 1);
+            itemInHand.addUnsafeEnchantment(RedstonePvp.getPoisonEnchantment(), 2);
             SoulboundEnchantment.applyDisplayName(itemInHand);
+            PoisonEnchantment.applyDisplayName(itemInHand, 2);
             player.updateInventory();
             return true;
         }
 
-        BukkitTask bukkitTask = Bukkit.getServer().getScheduler().runTaskLater(RedstonePvp.getPlugin(RedstonePvp.class), () -> pendingItemFrameModification.remove(player.getUniqueId()), 120);
+        BukkitTask bukkitTask = Bukkit.getServer().getScheduler().runTaskLater(mainInstance, () -> pendingItemFrameModification.remove(player.getUniqueId()), 120);
         Object[] objects = {args[0], bukkitTask};
 
         pendingItemFrameModification.put(player.getUniqueId(), objects);

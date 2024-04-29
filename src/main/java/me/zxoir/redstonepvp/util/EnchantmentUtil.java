@@ -1,6 +1,7 @@
 package me.zxoir.redstonepvp.util;
 
 import org.bukkit.enchantments.Enchantment;
+
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import java.util.Map;
  * @since 4/25/2024
  */
 public class EnchantmentUtil {
+    @SuppressWarnings({"unchecked", "deprecation"})
     public static void registerCustomEnchantment(Enchantment enchantment) {
         try {
             Field byIdField = Enchantment.class.getDeclaredField("byId");

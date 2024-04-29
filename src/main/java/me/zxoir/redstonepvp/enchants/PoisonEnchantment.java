@@ -6,12 +6,19 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
 
 public class PoisonEnchantment extends Enchantment {
+    private static final int POISON_DURATION_LEVEL_ONE = 20*5;
+    private static final int POISON_AMPLIFIER_LEVEL_ONE = 0;
+    private static final int POISON_DURATION_LEVEL_TWO = 20*5;
+    private static final int POISON_AMPLIFIER_LEVEL_TWO = 1;
+
     public PoisonEnchantment(int id) {
         super(id);
     }
@@ -22,7 +29,7 @@ public class PoisonEnchantment extends Enchantment {
         if (itemMeta == null)
             return;
 
-        String name = ChatColor.DARK_PURPLE + "Poison " + (level == 1 ? "I" : "II");
+        String name = ChatColor.RESET + "Poison " + (level == 1 ? "I" : "II");
         if (itemMeta.getLore() == null) {
             itemMeta.setLore(Collections.singletonList(name));
         } else {
@@ -32,6 +39,10 @@ public class PoisonEnchantment extends Enchantment {
         }
 
         itemStack.setItemMeta(itemMeta);
+    }
+
+    public static @NotNull PotionEffect getPoisonEffect(int level) {
+        return new PotionEffect(PotionEffectType.POISON, level == 1 ? POISON_DURATION_LEVEL_ONE : POISON_DURATION_LEVEL_TWO, level == 1 ? POISON_AMPLIFIER_LEVEL_ONE : POISON_AMPLIFIER_LEVEL_TWO);
     }
 
     public static double getPoisonChance(int level) {

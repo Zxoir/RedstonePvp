@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class ItemFrameClickerListener implements Listener {
+    private static final RedstonePvp mainInstance = RedstonePvp.getPlugin(RedstonePvp.class);
     private static final HashMap<UUID, HashMap<ItemFrame, Long>> playerItemFrameCooldowns = new HashMap<>(); // TODO: Save on disable
 
     @EventHandler()
@@ -117,7 +118,7 @@ public class ItemFrameClickerListener implements Listener {
         if (cooldown > 0) {
             playerItemFrameCooldowns.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>()).put(itemFrame, System.currentTimeMillis() + cooldown);
             Bukkit.getScheduler().runTaskLater(
-                    RedstonePvp.getPlugin(RedstonePvp.class),
+                    mainInstance,
                     () -> {
                         HashMap<ItemFrame, Long> cooldowns = playerItemFrameCooldowns.get(player.getUniqueId());
                         cooldowns.remove(itemFrame);

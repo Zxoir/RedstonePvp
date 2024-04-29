@@ -2,11 +2,8 @@ package me.zxoir.redstonepvp.util;
 
 import io.netty.util.internal.ThreadLocalRandom;
 import me.zxoir.redstonepvp.RedstonePvp;
-import me.zxoir.redstonepvp.data.PlayerProfile;
-import me.zxoir.redstonepvp.managers.PlayerProfileManager;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -62,6 +59,7 @@ public class CommonUtils {
         });
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean rollPercentage(double percentage) {
         if (percentage < 0.0 || percentage > 100.0) {
             throw new IllegalArgumentException("Percentage must be between 0.0 and 100.0");

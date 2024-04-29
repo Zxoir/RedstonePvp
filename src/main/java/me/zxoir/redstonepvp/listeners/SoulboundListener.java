@@ -24,6 +24,7 @@ import java.util.UUID;
  * @since 4/25/2024
  */
 public class SoulboundListener implements Listener {
+    private static final RedstonePvp mainInstance = RedstonePvp.getPlugin(RedstonePvp.class);
     private static final HashMap<UUID, List<ItemStack>> itemsToReturn = new HashMap<>();
 
     @EventHandler
@@ -41,7 +42,7 @@ public class SoulboundListener implements Listener {
             return true;
         });
 
-        Bukkit.getScheduler().runTaskLater(RedstonePvp.getPlugin(RedstonePvp.class), () -> player.spigot().respawn(), 5);
+        Bukkit.getScheduler().runTaskLater(mainInstance, () -> player.spigot().respawn(), 5);
     }
 
     @EventHandler
@@ -51,7 +52,7 @@ public class SoulboundListener implements Listener {
         if (!itemsToReturn.containsKey(player.getUniqueId()))
             return;
 
-        Bukkit.getScheduler().runTaskLater(RedstonePvp.getPlugin(RedstonePvp.class), () -> {
+        Bukkit.getScheduler().runTaskLater(mainInstance, () -> {
             List<ItemStack> items = itemsToReturn.get(player.getUniqueId());
             items.forEach(item -> player.getInventory().addItem(item));
             itemsToReturn.remove(player.getUniqueId());

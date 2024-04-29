@@ -7,8 +7,6 @@ import me.zxoir.redstonepvp.data.PlayerProfile;
 import me.zxoir.redstonepvp.data.PlayerStats;
 import me.zxoir.redstonepvp.database.RedstoneDatabase;
 import me.zxoir.redstonepvp.util.FriendSetSerializer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;

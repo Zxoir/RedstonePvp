@@ -3,11 +3,13 @@ package me.zxoir.redstonepvp.listeners;
 import me.zxoir.redstonepvp.RedstonePvp;
 import me.zxoir.redstonepvp.util.CommonUtils;
 import org.bukkit.GameMode;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class CombatLogListener implements Listener {
     private static final RedstonePvp mainInstance = RedstonePvp.getPlugin(RedstonePvp.class);
     private final Map<UUID, Integer> combatTimers = new HashMap<>();
@@ -35,6 +38,40 @@ public class CombatLogListener implements Listener {
             return;
 
         if (target.getGameMode() == GameMode.CREATIVE || attacker.getGameMode() == GameMode.CREATIVE)
+            return;
+
+        if (attacker.equals(target))
+            return;
+
+        startCombatTimer(attacker, target);
+        startCombatTimer(target, attacker);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBowDamage(@NotNull EntityDamageByEntityEvent event) {
+        if (event.getFinalDamage() == 0)
+            return;
+
+        if (event.getCause() != EntityDamageEvent.DamageCause.PROJECTILE)
+            return;
+
+        if (event.getDamager().getType() != EntityType.ARROW)
+            return;
+
+        Arrow arrow = (Arrow) event.getDamager();
+        if (!(arrow.getShooter() instanceof Player))
+            return;
+
+        if (!event.getEntityType().equals(EntityType.PLAYER))
+            return;
+
+        Player attacker = (Player) arrow.getShooter();
+        Player target = (Player) event.getEntity();
+
+        if (target.getGameMode() == GameMode.CREATIVE || attacker.getGameMode() == GameMode.CREATIVE)
+            return;
+
+        if (attacker.equals(target))
             return;
 
         startCombatTimer(attacker, target);

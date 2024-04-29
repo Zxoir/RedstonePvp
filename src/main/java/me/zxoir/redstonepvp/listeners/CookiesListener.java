@@ -73,7 +73,7 @@ public class CookiesListener implements Listener {
         Player player = event.getPlayer();
         ItemStack pickedItem = event.getItem().getItemStack();
 
-        Bukkit.getScheduler().runTaskLater(RedstonePvp.getPlugin(RedstonePvp.class), () -> {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
             ItemStack itemOnHand = player.getItemInHand();
             if (!itemOnHand.getType().equals(pickedItem.getType()))
                 return;
