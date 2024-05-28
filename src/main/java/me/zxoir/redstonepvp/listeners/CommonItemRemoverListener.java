@@ -1,5 +1,6 @@
 package me.zxoir.redstonepvp.listeners;
 
+import me.zxoir.redstonepvp.util.CommonUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +35,7 @@ public class CommonItemRemoverListener implements Listener {
     }
 
     private boolean isCommonItem(ItemStack itemStack) {
-        if (itemStack == null || itemStack.getType() == Material.AIR)
+        if (CommonUtils.isAirOrNull(itemStack))
             return false;
 
         if (!itemStack.getEnchantments().isEmpty())

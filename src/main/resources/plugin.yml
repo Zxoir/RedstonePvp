@@ -13,3 +13,6 @@ permissions:
   "redstonepvp.itemframeclicker.command":
     description: Permission to use the itemframe clicker command
     default: op
+  "redstonepvp.points.command":
+    description: Permission to use the points command
+    default: op

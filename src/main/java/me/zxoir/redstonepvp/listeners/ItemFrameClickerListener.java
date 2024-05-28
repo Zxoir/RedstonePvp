@@ -2,6 +2,7 @@ package me.zxoir.redstonepvp.listeners;
 
 import me.zxoir.redstonepvp.RedstonePvp;
 import me.zxoir.redstonepvp.commands.ItemFrameClickerCommand;
+import me.zxoir.redstonepvp.util.CommonUtils;
 import me.zxoir.redstonepvp.util.ItemStackBuilder;
 import me.zxoir.redstonepvp.util.TimeManager;
 import org.bukkit.Bukkit;
@@ -38,7 +39,7 @@ public class ItemFrameClickerListener implements Listener {
         ItemStack itemStack = player.getItemInHand();
         ItemStack itemStackOnFrame = itemFrame.getItem().clone();
 
-        if (itemStack == null || itemStack.getType() == Material.AIR || itemStackOnFrame == null || itemStackOnFrame.getType() != Material.AIR)
+        if (CommonUtils.isAirOrNull(itemStack) || itemStackOnFrame == null || itemStackOnFrame.getType() != Material.AIR)
             return;
 
         event.setCancelled(true);
@@ -55,7 +56,7 @@ public class ItemFrameClickerListener implements Listener {
         ItemStack itemStack = itemFrame.getItem();
         Player player = event.getPlayer();
 
-        if (itemStack == null || itemStack.getType() == Material.AIR)
+        if (CommonUtils.isAirOrNull(itemStack))
             return;
 
         if (!ItemFrameClickerCommand.getPendingItemFrameModification().containsKey(player.getUniqueId()))
@@ -101,7 +102,7 @@ public class ItemFrameClickerListener implements Listener {
         ItemFrame itemFrame = (ItemFrame) event.getRightClicked();
         ItemStack itemStack = itemFrame.getItem().clone();
 
-        if (itemStack == null || itemStack.getType() == Material.AIR)
+        if (CommonUtils.isAirOrNull(itemStack))
             return;
 
         Player player = event.getPlayer();
