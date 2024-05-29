@@ -2,6 +2,8 @@ package me.zxoir.redstonepvp;
 
 import lombok.Getter;
 import me.zxoir.redstonepvp.commands.ItemFrameClickerCommand;
+import me.zxoir.redstonepvp.commands.PointsCommand;
+import me.zxoir.redstonepvp.commands.TransferCommand;
 import me.zxoir.redstonepvp.commands.TrashCommand;
 import me.zxoir.redstonepvp.database.RedstoneDatabase;
 import me.zxoir.redstonepvp.enchants.PoisonEnchantment;
@@ -85,6 +87,8 @@ public final class RedstonePvp extends JavaPlugin {
     private void registerCommand() {
         getServer().getPluginCommand("itemframeclicker").setExecutor(new ItemFrameClickerCommand());
         getServer().getPluginCommand("trash").setExecutor(new TrashCommand());
+        getServer().getPluginCommand("transfer").setExecutor(new TransferCommand());
+        getServer().getPluginCommand("points").setExecutor(new PointsCommand());
     }
 
     @Override

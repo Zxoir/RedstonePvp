@@ -9,6 +9,10 @@ commands:
     permission: redstonepvp.itemframeclicker.command
   trash:
     description: Trash Command
+  transfer:
+    description: Transfer points command
+  points:
+    description: Points Command
 permissions:
   "redstonepvp.itemframeclicker.command":
     description: Permission to use the itemframe clicker command

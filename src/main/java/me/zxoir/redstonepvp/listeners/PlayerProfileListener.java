@@ -24,12 +24,10 @@ public class PlayerProfileListener implements Listener {
     public void onJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        PlayerProfileDatabaseManager.isPlayerInDatabase(player.getUniqueId()).thenAccept(isInDatabase -> {
-            if (isInDatabase)
-                return;
+        if (PlayerProfileDatabaseManager.isPlayerInDatabase(player.getUniqueId()))
+            return;
 
-            PlayerProfileManager.createPlayerProfile(player.getUniqueId());
-        });
+        PlayerProfileManager.createPlayerProfile(player.getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

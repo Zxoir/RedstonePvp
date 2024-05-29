@@ -196,21 +196,24 @@ public class PlayerProfileDatabaseManager {
                 statement.setString(2, user.getUuid().toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
-                e.printStackTrace();
-                throw new IllegalStateException("ERROR: Failed to update friends for user '" + user.getUuid().toString() + "' in the database.");
+                throw new IllegalStateException("ERROR: Failed to update friends for user '" + user.getUuid().toString() + "' in the database.", e);
             }
         });
     }
 
-    public static @NotNull CompletableFuture<Boolean> isPlayerInDatabase(UUID uuid) {
-        return RedstoneDatabase.execute(conn -> {
-            PreparedStatement statement = conn.prepareStatement("SELECT COUNT(*) FROM redstoneprofiles WHERE uuid = ?");
-            statement.setString(1, uuid.toString());
-            ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            int count = resultSet.getInt(1);
-            return count > 0;
-        });
+    public static boolean isPlayerInDatabase(UUID uuid) {
+        try {
+            return RedstoneDatabase.execute(conn -> {
+                PreparedStatement statement = conn.prepareStatement("SELECT COUNT(*) FROM redstoneprofiles WHERE uuid = ?");
+                statement.setString(1, uuid.toString());
+                ResultSet resultSet = statement.executeQuery();
+                resultSet.next();
+                int count = resultSet.getInt(1);
+                return count > 0;
+            }).get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("ERROR: Failed to check if player is in Database.", e);
+        }
     }
 
     private static @NotNull PlayerProfile resultSetToPlayerProfile(@NotNull ResultSet resultSet) {

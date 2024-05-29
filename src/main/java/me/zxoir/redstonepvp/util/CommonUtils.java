@@ -49,6 +49,15 @@ public class CommonUtils {
         }
     }
 
+    public static boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     public static void sendActionText(Player player, String message) {
         runTaskAsync(() -> {
             /*PlayerProfile user = PlayerProfileManager.getPlayerProfile(player.getUniqueId());

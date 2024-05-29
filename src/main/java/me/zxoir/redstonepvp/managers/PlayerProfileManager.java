@@ -2,6 +2,7 @@ package me.zxoir.redstonepvp.managers;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import lombok.Getter;
 import me.zxoir.redstonepvp.RedstonePvp;
 import me.zxoir.redstonepvp.data.PlayerProfile;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @since 4/17/2024
  */
 public class PlayerProfileManager {
+    @Getter
     private static final Cache<UUID, PlayerProfile> profileCache = Caffeine.newBuilder()
             .expireAfterAccess(3, TimeUnit.MINUTES)
             .build();
@@ -35,10 +37,6 @@ public class PlayerProfileManager {
         }
 
         return profile;
-    }
-
-    public static Cache<UUID, PlayerProfile> getProfileCache() {
-        return profileCache;
     }
 
     public static void cacheProfile(@NotNull PlayerProfile profile) {
