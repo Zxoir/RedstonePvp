@@ -13,6 +13,9 @@ commands:
     description: Transfer points command
   points:
     description: Points Command
+  friend:
+    description: Friend command
+    aliases: [friends]
 permissions:
   "redstonepvp.itemframeclicker.command":
     description: Permission to use the itemframe clicker command

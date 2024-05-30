@@ -1,14 +1,13 @@
 package me.zxoir.redstonepvp;
 
 import lombok.Getter;
-import me.zxoir.redstonepvp.commands.ItemFrameClickerCommand;
-import me.zxoir.redstonepvp.commands.PointsCommand;
-import me.zxoir.redstonepvp.commands.TransferCommand;
-import me.zxoir.redstonepvp.commands.TrashCommand;
+import me.zxoir.redstonepvp.commands.*;
+import me.zxoir.redstonepvp.database.DataFile;
 import me.zxoir.redstonepvp.database.RedstoneDatabase;
 import me.zxoir.redstonepvp.enchants.PoisonEnchantment;
 import me.zxoir.redstonepvp.enchants.SoulboundEnchantment;
 import me.zxoir.redstonepvp.listeners.*;
+import me.zxoir.redstonepvp.managers.ConfigManager;
 import me.zxoir.redstonepvp.util.EnchantmentUtil;
 import me.zxoir.redstonepvp.util.ProfileBatchSaveTask;
 import org.apache.logging.log4j.LogManager;
@@ -31,10 +30,14 @@ public final class RedstonePvp extends JavaPlugin {
     private static Enchantment soulboundEnchantment;
     @Getter
     private static Enchantment poisonEnchantment;
+    @Getter
+    private static DataFile dataFile;
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
+        dataFile = new DataFile();
+        dataFile.setup();
+        ConfigManager.setup();
 
         RedstoneDatabase.createTable("CREATE TABLE IF NOT EXISTS redstoneprofiles(" +
                 "uuid VARCHAR(36) PRIMARY KEY NOT NULL," +
@@ -89,6 +92,7 @@ public final class RedstonePvp extends JavaPlugin {
         getServer().getPluginCommand("trash").setExecutor(new TrashCommand());
         getServer().getPluginCommand("transfer").setExecutor(new TransferCommand());
         getServer().getPluginCommand("points").setExecutor(new PointsCommand());
+        getServer().getPluginCommand("friend").setExecutor(new FriendCommand());
     }
 
     @Override

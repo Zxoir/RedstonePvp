@@ -6,3 +6,6 @@ Database IP: localhost
 Database Port: 3306
 
 cookie-cooldown: 5000
+
+# ENGLISH LOCALE
+InvalidPermissionMessage: "&cYou don't have permission to use this command."

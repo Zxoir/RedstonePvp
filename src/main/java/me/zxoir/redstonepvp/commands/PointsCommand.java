@@ -105,6 +105,7 @@ public class PointsCommand implements CommandExecutor {
             return true;
         }
 
+        sender.sendMessage(colorize("&eCommand usages:\n&7/points <add/set/remove> <Player> <Amount>\n&7/points transfer <Sender> <Receiver> <Amount>"));
         return true;
     }
 }
