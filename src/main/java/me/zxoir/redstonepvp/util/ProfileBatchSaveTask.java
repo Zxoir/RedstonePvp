@@ -17,7 +17,6 @@ import java.util.List;
  */
 public class ProfileBatchSaveTask extends BukkitRunnable {
     private static final int BATCH_SIZE = 30;
-    private static final RedstonePvp pluginInstance = RedstonePvp.getPlugin(RedstonePvp.class);
 
     @Override
     public void run() {

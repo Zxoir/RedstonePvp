@@ -5,7 +5,7 @@ description: "RedstonePvp plugin"
 commands:
   itemframeclicker:
     description: ItemFrameClicker command
-    aliases: [ifc]
+    aliases: [ifc, ic]
     permission: redstonepvp.itemframeclicker.command
   trash:
     description: Trash Command
@@ -15,11 +15,17 @@ commands:
     description: Points Command
   friend:
     description: Friend command
-    aliases: [friends]
+    aliases: [friends, f]
+  duel:
+    description: Duel command
+    aliases: [d, duels]
 permissions:
   "redstonepvp.itemframeclicker.command":
     description: Permission to use the itemframe clicker command
     default: op
   "redstonepvp.points.command":
     description: Permission to use the points command
+    default: op
+  "redstonepvp.duel.admin":
+    description: Permission to manage duels
     default: op

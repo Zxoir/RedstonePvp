@@ -38,7 +38,7 @@ public class RedstoneDatabase {
             String ip = configuration.getString("Database IP");
             int port = configuration.getInt("Database Port");
 
-            config.setJdbcUrl("jdbc:mysql://" + ip + ":" + port + "/" + database);
+            config.setJdbcUrl("jdbc:mysql://" + ip + ":" + port + "/" + database + "?characterEncoding=latin1");
             config.setUsername(username);
             config.setPassword(password);
             config.setConnectionTestQuery("SELECT 1");

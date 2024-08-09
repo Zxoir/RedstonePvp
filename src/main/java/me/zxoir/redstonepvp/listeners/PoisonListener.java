@@ -98,6 +98,6 @@ public class PoisonListener implements Listener {
 
     private void applyPoisonEffect(Player player, int level) {
         player.addPotionEffect(PoisonEnchantment.getPoisonEffect(level));
-        player.spigot().playEffect(player.getLocation().add(0.5, 0, 0.5), Effect.POTION_BREAK, 11, 1, 1, 1, 1, 1, 1, 1);
+        player.getWorld().spigot().playEffect(player.getLocation().add(0.5, 0, 0.5), Effect.POTION_BREAK, 11, 1, 1, 1, 1, 1, 1, 50);
     }
 }

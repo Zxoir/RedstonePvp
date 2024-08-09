@@ -76,13 +76,13 @@ public class FriendCommand implements CommandExecutor {
                 player.sendMessage(colorize("&eYou have sent a friend request to " + friend.getName() + " that will expire in 5 minutes"));
 
                 TextComponent message = new TextComponent(colorize("&a\n&e" + player.getName() + " has sent you a friend request "));
-                TextComponent acceptButton = new TextComponent("&8[&a&lACCEPT&8] ");
-                TextComponent denyButton = new TextComponent("&8[&c&lDENY&8]");
+                TextComponent acceptButton = new TextComponent(colorize("&8[&a&lACCEPT&8] "));
+                TextComponent denyButton = new TextComponent(colorize("&8[&c&lDENY&8]"));
                 acceptButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colorize("&7Click to accept")).create()));
                 acceptButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend accept " + player.getName()));
-                acceptButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colorize("&7Click to deny")).create()));
-                acceptButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + player.getName()));
-                player.spigot().sendMessage(message, acceptButton, denyButton);
+                denyButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colorize("&7Click to deny")).create()));
+                denyButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + player.getName()));
+                friend.spigot().sendMessage(message, acceptButton, denyButton);
 
                 Bukkit.getScheduler().runTaskLater(RedstonePvp.getPlugin(RedstonePvp.class), () -> removeFriendRequest(player.getUniqueId(), friend.getUniqueId()), 20*60*5);
                 return true;

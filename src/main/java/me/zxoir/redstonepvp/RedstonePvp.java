@@ -7,7 +7,7 @@ import me.zxoir.redstonepvp.database.RedstoneDatabase;
 import me.zxoir.redstonepvp.enchants.PoisonEnchantment;
 import me.zxoir.redstonepvp.enchants.SoulboundEnchantment;
 import me.zxoir.redstonepvp.listeners.*;
-import me.zxoir.redstonepvp.managers.ConfigManager;
+import me.zxoir.redstonepvp.managers.ArenaManager;
 import me.zxoir.redstonepvp.util.EnchantmentUtil;
 import me.zxoir.redstonepvp.util.ProfileBatchSaveTask;
 import org.apache.logging.log4j.LogManager;
@@ -37,7 +37,7 @@ public final class RedstonePvp extends JavaPlugin {
     public void onEnable() {
         dataFile = new DataFile();
         dataFile.setup();
-        ConfigManager.setup();
+        saveDefaultConfig();
 
         RedstoneDatabase.createTable("CREATE TABLE IF NOT EXISTS redstoneprofiles(" +
                 "uuid VARCHAR(36) PRIMARY KEY NOT NULL," +
@@ -58,6 +58,7 @@ public final class RedstonePvp extends JavaPlugin {
         EnchantmentUtil.registerCustomEnchantment(soulboundEnchantment);
         EnchantmentUtil.registerCustomEnchantment(poisonEnchantment);
 
+        ArenaManager.loadArenas();
         registerListeners();
         registerCommand();
         loadConfigValues();
@@ -85,6 +86,7 @@ public final class RedstonePvp extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AbsorptionRemover(), this);
         getServer().getPluginManager().registerEvents(new BottleRemover(), this);
         getServer().getPluginManager().registerEvents(new AutoEnchantLapizPlacer(), this);
+        getServer().getPluginManager().registerEvents(new DuelCommand(), this);
     }
 
     private void registerCommand() {
@@ -93,10 +95,12 @@ public final class RedstonePvp extends JavaPlugin {
         getServer().getPluginCommand("transfer").setExecutor(new TransferCommand());
         getServer().getPluginCommand("points").setExecutor(new PointsCommand());
         getServer().getPluginCommand("friend").setExecutor(new FriendCommand());
+        getServer().getPluginCommand("duel").setExecutor(new DuelCommand());
     }
 
     @Override
     public void onDisable() {
+        ArenaManager.saveArenas();
         RedstoneDatabase.getDataSource().close();
     }
 }
