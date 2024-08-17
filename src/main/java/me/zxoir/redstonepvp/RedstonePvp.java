@@ -6,6 +6,7 @@ import me.zxoir.redstonepvp.database.DataFile;
 import me.zxoir.redstonepvp.database.RedstoneDatabase;
 import me.zxoir.redstonepvp.enchants.PoisonEnchantment;
 import me.zxoir.redstonepvp.enchants.SoulboundEnchantment;
+import me.zxoir.redstonepvp.enchants.WitherEnchantment;
 import me.zxoir.redstonepvp.listeners.*;
 import me.zxoir.redstonepvp.managers.ArenaManager;
 import me.zxoir.redstonepvp.util.EnchantmentUtil;
@@ -31,6 +32,8 @@ public final class RedstonePvp extends JavaPlugin {
     @Getter
     private static Enchantment poisonEnchantment;
     @Getter
+    private static Enchantment witherEnchantment;
+    @Getter
     private static DataFile dataFile;
 
     @Override
@@ -55,8 +58,10 @@ public final class RedstonePvp extends JavaPlugin {
 
         soulboundEnchantment = new SoulboundEnchantment(100);
         poisonEnchantment = new PoisonEnchantment(100);
+        witherEnchantment = new WitherEnchantment(100);
         EnchantmentUtil.registerCustomEnchantment(soulboundEnchantment);
         EnchantmentUtil.registerCustomEnchantment(poisonEnchantment);
+        EnchantmentUtil.registerCustomEnchantment(witherEnchantment);
 
         ArenaManager.loadArenas();
         registerListeners();
